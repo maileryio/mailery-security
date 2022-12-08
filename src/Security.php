@@ -18,22 +18,22 @@ class Security
 {
     /**
      * @param string $encryptKey
-     * @param SerializerInterface $serilizer
+     * @param SerializerInterface $serializer
      */
     public function __construct(
         private readonly string $encryptKey,
-        private SerializerInterface $serilizer
+        private SerializerInterface $serializer
     ) {
     }
 
     /**
-     * @param SerializerInterface $serilizer
+     * @param SerializerInterface $serializer
      * @return self
      */
-    public function withSerializer(SerializerInterface $serilizer): self
+    public function withSerializer(SerializerInterface $serializer): self
     {
         $new = clone $this;
-        $new->serilizer = $serilizer;
+        $new->serializer = $serializer;
 
         return $new;
     }
@@ -46,7 +46,7 @@ class Security
     {
         return base64_encode(
             (new Crypt())->encryptByKey(
-                $this->serilizer->serialize($params),
+                $this->serializer->serialize($params),
                 $this->encryptKey
             )
         );
@@ -58,7 +58,7 @@ class Security
      */
     public function decrypt(string $string): mixed
     {
-        return $this->serilizer->deserialize(
+        return $this->serializer->deserialize(
             (new Crypt())->decryptByKey(
                 base64_decode($string, true),
                 $this->encryptKey
