@@ -15,7 +15,7 @@ namespace Mailery\Security;
 class MappedSerializer implements SerializerInterface
 {
     /**
-     * @param array $map
+     * @param array<string, string> $map
      */
     public function __construct(
         private readonly array $map
@@ -28,6 +28,7 @@ class MappedSerializer implements SerializerInterface
     public function serialize(mixed $data): string
     {
         if (is_array($data)) {
+            /** @var array<string, string> $data */
             foreach ($this->map as $key => $alias) {
                 if (!isset($data[$key])) {
                     continue;
@@ -46,9 +47,11 @@ class MappedSerializer implements SerializerInterface
      */
     public function deserialize(string $data): mixed
     {
+        /** @var mixed $data */
         $data = unserialize($data);
 
         if (is_array($data)) {
+            /** @var array<string, string> $data */
             foreach ($this->map as $key => $alias) {
                 if (!isset($data[$alias])) {
                     continue;

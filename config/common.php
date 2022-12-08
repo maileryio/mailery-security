@@ -10,12 +10,15 @@ declare(strict_types=1);
  * @copyright Copyright (c) 2022, Mailery (https://mailery.io/)
  */
 
+use Mailery\Security\PhpSerializer;
 use Mailery\Security\Security;
+use Yiisoft\Definitions\Reference;
 
 return [
     Security::class => [
         '__construct()' => [
             'encryptKey' => $params['maileryio/mailery-security']['secretKey'],
+            'serializer' => Reference::to(PhpSerializer::class),
         ],
     ],
 ];

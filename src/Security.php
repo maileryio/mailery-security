@@ -18,15 +18,12 @@ class Security
 {
     /**
      * @param string $encryptKey
-     * @param SerializerInterface|null $serilizer
+     * @param SerializerInterface $serilizer
      */
     public function __construct(
         private readonly string $encryptKey,
-        private ?SerializerInterface $serilizer = null
+        private SerializerInterface $serilizer
     ) {
-        if ($this->serilizer === null) {
-            $this->serilizer = new PhpSerializer();
-        }
     }
 
     /**
@@ -42,13 +39,13 @@ class Security
     }
 
     /**
-     * @param array $params
+     * @param mixed $params
      * @return string
      */
-    public function encrypt(array $params): string
+    public function encrypt(mixed $params): string
     {
         return base64_encode(
-            (string) (new Crypt())->encryptByKey(
+            (new Crypt())->encryptByKey(
                 $this->serilizer->serialize($params),
                 $this->encryptKey
             )
@@ -57,9 +54,9 @@ class Security
 
     /**
      * @param string $string
-     * @return array
+     * @return mixed
      */
-    public function decrypt(string $string): array
+    public function decrypt(string $string): mixed
     {
         return $this->serilizer->deserialize(
             (new Crypt())->decryptByKey(
